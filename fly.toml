@@ -1,23 +1,29 @@
-# fly.toml file generated for thousand-day-ussd on 2022-12-24T16:12:13+02:00
+# fly.toml file generated for thousand-day-ussd on 2022-12-25T02:35:58+02:00
 
 app = "thousand-day-ussd"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
+[build]
+  builder = "paketobuildpacks/builder:full"
+  buildpacks = ["gcr.io/paketo-buildpacks/php"]
+  [build.args]
+    PHP_VERSION = "8.1"
+    BP_COMPOSER_INSTALL_OPTIONS = "--ignore-platform-req=ext-zlib"
+
 [env]
-  LOG_CHANNEL = "stderr"
-  LOG_LEVEL = "info"
-  LOG_STDERR_FORMATTER = "Monolog\\Formatter\\JsonFormatter"
+APP_URL = "https://thousand-day-ussd.fly.dev"
+PORT = 8080
+DB_PORT=5432
 
 [experimental]
   allowed_public_ports = []
   auto_rollback = true
 
-
 [[services]]
   http_checks = []
-  internal_port = 8043
+  internal_port = 8080
   processes = ["app"]
   protocol = "tcp"
   script_checks = []
@@ -29,7 +35,7 @@ processes = []
   [[services.ports]]
     force_https = true
     handlers = ["http"]
-    port = 80
+    port = 8080
 
   [[services.ports]]
     handlers = ["tls", "http"]

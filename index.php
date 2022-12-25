@@ -8,15 +8,20 @@ header('Access-Control-Max-Age: 1000');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 
 /* local db configuration */
-$db_url = getenv('DATABASE_URL');   //database connection string
+$host = getenv("DB_HOST");
+$port = getenv("DB_PORT");
+$dbname = getenv("DB_NAME");
+$user = getenv("DB_USER");
+$password = getenv("DB_PASS");
 
 //Connecting to database so that we can get db instance connection or return 
 try {
-    $dbConn = new PDO($db_url);
+    $dbConn = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $password);
     $dbConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $dbConn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch (Exception $e) {
-    echo "Connection failed" . $e->getMessage();
+    echo "END Mutwihaganire habaye ikibazo muri sisteme mwongere mukanya";
+    return;
 }
 
 // Get the parameters provided by Africa's Talking USSD gateway 
@@ -384,14 +389,14 @@ function register($level, $phone, $dbConn)
                         //Send Sms and record sent sms response from mista api
                         $smsInfo = "Muraho  " . $first_name . ",kwiyandikisha byagenze neza. mushobora kwandikisha umwana wanyu muri sisiteme yiminsi igihumbi y'umwana mukajya mubona inama kumikurire myiza yumwana nigahunda yinkingo Murakoze!";
 
-                        // $sms = SendSms($phone, $smsInfo);
-                        // if ($sms && $sms != null) {
-                        //     $cost = $sms['cost'];
-                        //     $ref = $sms['uid'];
-                        //     $receiver = $sms['to'];
-                        //     $status = $sms['status'];
-                        //     $dbConn->exec("INSERT INTO messages (ref,cost,receiver,status) VALUES('$ref',$cost,'$receiver','$status')");
-                        // }
+                        $sms = SendSms($phone, $smsInfo);
+                        if ($sms && $sms != null) {
+                            $cost = $sms['cost'];
+                            $ref = $sms['uid'];
+                            $receiver = $sms['to'];
+                            $status = $sms['status'];
+                            $dbConn->exec("INSERT INTO messages (ref,cost,receiver,status) VALUES('$ref',$cost,'$receiver','$status')");
+                        }
 
                         $res["msg"] = "END kwiyandikisha byagenze neza murakira ubutumwa bw'ikaze mukanya. Murakoze!";
                         $res["status"] = 0;
@@ -695,7 +700,6 @@ function ChildInfo($child_fetched_rows, $dbConn)
         "- Aho yavukiye:" . $child_fetched_rows['born_address'] . ".\n" .
         "- Igihe yavukiye:" . $child_fetched_rows['born_date'] . ".\n" .
         "- Imyaka afite:" . calcAges($child_fetched_rows['born_date']) . ".\n";
-    // "- Inkingo amaze gufata: " . $child_fetched_rows['id'];
 
 
     $child_id = $child_fetched_rows['id'];
@@ -727,4 +731,4 @@ $resp = array("sessionId" => $session_id, "message" => $response, "ContinueSessi
 
 
 
-return  $response;
+echo  $response;
