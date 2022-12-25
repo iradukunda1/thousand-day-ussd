@@ -13,6 +13,8 @@ $port = getenv("DB_PORT");
 $dbname = getenv("DB_NAME");
 $user = getenv("DB_USER");
 $password = getenv("DB_PASS");
+$sms_key = getenv("SMS_API_KEY");
+$sms_base_url = getenv("SMS_BASE_URL");
 
 //Connecting to database so that we can get db instance connection or return 
 try {
@@ -610,13 +612,15 @@ function toggleUserMenus($level, $dbConn, $phone, $txt)
 //Send Sms this will be responsible to send and return response
 function SendSms($phone, $sms)
 {
+    global $sms_key;
+    global $sms_base_url;
     // sms api
     $curl = curl_init();
 
     curl_setopt_array(
         $curl,
         array(
-            CURLOPT_URL => 'https://api.mista.io/sms',
+            CURLOPT_URL => $sms_base_url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -626,7 +630,7 @@ function SendSms($phone, $sms)
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => array('to' => $phone, 'from' => 'Baby Care', 'unicode' => '0', 'sms' => $sms, 'action' => 'send-sms'),
             CURLOPT_HTTPHEADER => array(
-                'x-api-key:189|EhfOIOAenjPhl6GkhNjvjrAWo5YmeOFDnulsV4VO'
+                "x-api-key:$sms_key"
             ),
         )
     );
@@ -694,12 +698,12 @@ function calcAges($date)
 //ChildInfo function used wrapper up children infomation with her/his corresponding vaccine
 function ChildInfo($child_fetched_rows, $dbConn)
 {
-    $res = "END Imyirondoro ya" . $child_fetched_rows['first_name'] . " :\n\n" .
-        "- Amazina:" . $child_fetched_rows['first_name'] . " " . $child_fetched_rows['second_name'] . "\n." .
-        "- Ibiro afite:" . $child_fetched_rows['current_weight'] / 1000 . " (kg).\n" .
-        "- Aho yavukiye:" . $child_fetched_rows['born_address'] . ".\n" .
-        "- Igihe yavukiye:" . $child_fetched_rows['born_date'] . ".\n" .
-        "- Imyaka afite:" . calcAges($child_fetched_rows['born_date']) . ".\n";
+    $res = "END Imyirondoro ya " . $child_fetched_rows['first_name'] . " :\n\n" .
+        "- Amazina: " . $child_fetched_rows['first_name'] . " " . $child_fetched_rows['second_name'] . "\n." .
+        "- Ibiro afite: " . $child_fetched_rows['current_weight'] / 1000 . " (kg).\n" .
+        "- Aho yavukiye: " . $child_fetched_rows['born_address'] . ".\n" .
+        "- Igihe yavukiye: " . $child_fetched_rows['born_date'] . ".\n" .
+        "- Imyaka afite: " . calcAges($child_fetched_rows['born_date']) . ".\n";
 
 
     $child_id = $child_fetched_rows['id'];
