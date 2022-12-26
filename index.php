@@ -22,7 +22,7 @@ try {
     $dbConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $dbConn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch (Exception $e) {
-    echo "END Mutwihaganire habaye ikibazo muri sisteme mwongere mukanya";
+    echo " Mutwihaganire habaye ikibazo muri sisteme mwongere mukanya";
     return;
 }
 
@@ -34,18 +34,18 @@ $serviceCode = addHashTagSuffix($_POST['serviceCode']);
 // $networkCode = $_REQUEST['networkCode'];
 
 
-$ussd_string_exploded = explode("800", $userinput);
+$ussd_string_exploded = explode("4", $userinput);
+
+$ussd_string_exploded = explode("4", $userinput);
 
 // Get menu level from ussd_string reply
 $level = $ussd_string_exploded[count($ussd_string_exploded) - 1];
-
-//Check if user enter default ussd so that we can return welcome screen
-if ($userinput == "800") {
+if ($userinput == "*662*800*4#") {
     $response = display_menu();
     $ContinueSession = 1;
 } else {
     $temp = explode('*', $level);
-    $level_1 = str_replace("#", '', $temp[1]);
+    $level_1 = str_replace("#", '', $temp[0]);
     switch ($level_1) {
         case 1:
             // If user selected 1 send them to the registration menu
@@ -72,8 +72,7 @@ if ($userinput == "800") {
                 $ContinueSession = 1;
             }
             break;
-        case 4:
-            //If user selected 4, send them to the change their pin
+        case "":
             $res_temp = changePin($level, $dbConn, $phone);
             $response = $res_temp['msg'];
             if ($res_temp['status'] == 0) {
@@ -83,7 +82,7 @@ if ($userinput == "800") {
             }
             break;
         default:
-            $response = "END Wahisemo ibitaribyo ongera mukanya!!!";
+            $response = " Wahisemo Ibitaribyo Ongera!!!";
             $ContinueSession = 0;
             break;
     }
@@ -92,14 +91,14 @@ if ($userinput == "800") {
 //This is the home menu function
 function display_menu()
 {
-    $initial_msg = "CON Murakaza Neza Kuri Sisiteme Y'Iminsi Igihumbi Y'umwana \n\n 1. kwiyandikisha(umubyeyi) \n 2. ibyerekeye sisiteme \n 3. konti yange \n 4. Guhindura umubare wibanga\n";
+    $initial_msg = " Murakaza Neza Kuri Sisiteme Y'Iminsi Igihumbi Y'umwana \n\n 1. kwiyandikisha(umubyeyi) \n 2. ibyerekeye sisiteme \n 3. konti yange \n 4. Guhindura umubare wibanga\n";
     return $initial_msg; // add \n so that the menu has new lines
 }
 
 // Function that hanldles About menu
 function about()
 {
-    $about_text = "END -Iminsi Igihumbi ni gahunda izajya ifasha ababyeyi kugira amakuru ahagije kumikurire yabana bari munsi y'imyaka 2 \n 
+    $about_text = " -Iminsi Igihumbi ni gahunda izajya ifasha ababyeyi kugira amakuru ahagije kumikurire yabana bari munsi y'imyaka 2 \n 
     - umubyeyi yiyandikisha muri sisiteme hanyuma akabasha kwandika umwana we \n
     
     ";
@@ -108,7 +107,7 @@ function about()
 
 function display_user_menu()
 {
-    $ussd_text = "CON Ibijyanye na konti yajye \n\n 1. kwandika umwana mushya\n 2. Kureba abana bakwanditseho \n  3. Tanga igitekerezo cyagwa ikibazo\n 4. Gusohoka muri system\n 5. Subira ahabanza \n";
+    $ussd_text = " Ibijyanye na konti yajye \n\n 1. kwandika umwana mushya\n 2. Kureba abana bakwanditseho \n  3. Tanga igitekerezo cyagwa ikibazo\n 4. Gusohoka muri system\n 5. Subira ahabanza \n";
     return $ussd_text;
 }
 
@@ -119,34 +118,34 @@ function login($level, $dbConn, $phone)
     $res = array();
     switch (count($temp)) {
         case 2:
-            $res["msg"] = "CON injiza umubare wibanga:";
+            $res["msg"] = " injiza umubare wibanga:";
             $res["status"] = 1;
             break;
         case 3:
             $pin = $lvl;
             if (empty(trim($lvl))) {
-                $res["msg"] = "END ntakintu mwinjijemo ntabwo byemewe";
+                $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
                 $res["status"] = 0;
             } else {
                 try {
                     $search_result = $dbConn->query("SELECT * FROM guardians WHERE phone='$phone' and pin='$pin'");
                     $total_rows = $search_result->rowCount();
                     if ($total_rows == 0) {
-                        $res["msg"] = "END Umubare w'ibanga ntabwo ariwo.";
+                        $res["msg"] = " Umubare w'ibanga ntabwo ariwo.";
                         $res["status"] = 0;
                     } else {
                         $res["msg"] = display_user_menu();
                         $res["status"] = 1;
                     }
                 } catch (PDOException $e) {
-                    $res["msg"] = "END habaye ikibazo, mwongere mukanya";
+                    $res["msg"] = " habaye ikibazo, mwongere mukanya";
                     $res["status"] = 0;
                 }
             }
             break;
         case 4:
             if (empty($lvl)) {
-                $res["msg"] = "END ntakintu mwinjijemo ntabwo byemewe";
+                $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
                 $res["status"] = 0;
             } else {
                 $resSel = resSelectedMenu($lvl, $dbConn, $phone);
@@ -155,7 +154,7 @@ function login($level, $dbConn, $phone)
             break;
         case 5:
             if (empty($lvl)) {
-                $res["msg"] = "END ntakintu mwinjijemo ntabwo byemewe";
+                $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
                 $res["status"] = 0;
             } else {
                 $resSel = toggleUserMenus($temp, $dbConn, $phone, $lvl);
@@ -164,67 +163,67 @@ function login($level, $dbConn, $phone)
             break;
         case 6:
             if (empty($lvl)) {
-                $res["msg"] = "END ntakintu mwinjijemo ntabwo byemewe";
+                $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
                 $res["status"] = 0;
             } else {
-                $res["msg"] = "CON igitsina cyumwana \n 1.gabo \n 2.gore ";
+                $res["msg"] = " igitsina cyumwana \n 1.gabo \n 2.gore ";
                 $res["status"] = 1;
             }
             break;
         case 7:
             if (empty($lvl)) {
-                $res["msg"] = "END ntakintu mwinjijemo ntabwo byemewe";
+                $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
                 $res["status"] = 0;
             } else if (ctype_digit($lvl) != 1) {
-                $res["msg"] = "END hemewe imibare gusa";
+                $res["msg"] = " hemewe imibare gusa";
                 $res["status"] = 0;
             } else {
-                $res["msg"] = "CON andikamo ibiro umwana yavukanye mumagaramu(gram).urugero: 1500(1.5kg)\n";
+                $res["msg"] = " andikamo ibiro umwana yavukanye mumagaramu(gram).urugero: 1500(1.5kg)\n";
                 $res["status"] = 1;
             }
             break;
         case 8:
             if (empty($lvl)) {
-                $res["msg"] = "END ntakintu mwinjijemo ntabwo byemewe";
+                $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
                 $res["status"] = 0;
             } else if (ctype_digit($lvl) != 1) {
-                $res["msg"] = "END hemewe imibare gusa";
+                $res["msg"] = " hemewe imibare gusa";
                 $res["status"] = 0;
             } else {
-                $res["msg"] = "CON andikamo ibiro umwana afite ubu mumagaramu(gram).urugero: 2000(2kg)\n";
+                $res["msg"] = " andikamo ibiro umwana afite ubu mumagaramu(gram).urugero: 2000(2kg)\n";
                 $res["status"] = 1;
             }
             break;
         case 9:
             if (empty($lvl)) {
-                $res["msg"] = "END ntakintu mwinjijemo ntabwo byemewe";
+                $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
                 $res["status"] = 0;
             } else if (ctype_digit($lvl) != 1) {
-                $res["msg"] = "END hemewe imibare gusa";
+                $res["msg"] = " hemewe imibare gusa";
                 $res["status"] = 0;
             } else {
-                $res["msg"] = "CON andikamo aho umwana yavukiye(aderesi).urugero:kicukiro centre de saint\n";
+                $res["msg"] = " andikamo aho umwana yavukiye(aderesi).urugero:kicukiro centre de saint\n";
                 $res["status"] = 1;
             }
             break;
         case 10:
             if (empty($lvl)) {
-                $res["msg"] = "END ntakintu mwinjijemo ntabwo byemewe";
+                $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
                 $res["status"] = 0;
             } else {
-                $res["msg"] = "CON Injiza itariki yivuka. urugero:\n " . date("Y-m-d") . (" itariki igomba kuba iri munsi yimyaka ibiri uhereye ubu") . "\n";
+                $res["msg"] = " Injiza itariki yivuka. urugero:\n " . date("Y-m-d") . (" itariki igomba kuba iri munsi yimyaka ibiri uhereye ubu") . "\n";
                 $res["status"] = 1;
             }
             break;
         case 11:
             if (empty($lvl)) {
-                $res["msg"] = "END ntakintu mwinjijemo ntabwo byemewe";
+                $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
                 $res["status"] = 0;
             } else if (strtotime($lvl) < strtotime('-2 years')) {
-                $res["msg"] = "END Umwana agomba kuba ari munsi yimyaka 2.";
+                $res["msg"] = " Umwana agomba kuba ari munsi yimyaka 2.";
                 $res["status"] = 0;
             } else if ($lvl > date('Y-m-d')) {
-                $res["msg"] = "END Mwashyizemo itariki itaragera.";
+                $res["msg"] = " Mwashyizemo itariki itaragera.";
                 $res["status"] = 0;
             } else {
                 $search_result = $dbConn->query("SELECT * FROM guardians WHERE phone='$phone'");
@@ -248,7 +247,7 @@ function login($level, $dbConn, $phone)
                         try {
                             $dbConn->exec("INSERT INTO schedulers (receiver, message, time_to_be_sent) VALUES('$phone', '$smstext', '$timetosend')");
                         } catch (PDOException $e) {
-                            $res["msg"] = "END habaye ikibazo, mwongere mukanya";
+                            $res["msg"] = " habaye ikibazo, mwongere mukanya";
                             $res["status"] = 0;
                         }
                     }
@@ -262,7 +261,7 @@ function login($level, $dbConn, $phone)
                     $search_result = $dbConn->query("SELECT * FROM childrens WHERE parent_id='$pid' AND first_name='$first_name' AND second_name='$second_name'");
                     $fetched_rows = $search_result->fetch();
                     if (count($search_result_data) > 0) {
-                        $res["msg"] = "END Umwana ufite aya mazina! " . $first_name . "  .$second_name . asanzwe akanditse muri sisiteme ntabwo byakunze kumwandika";
+                        $res["msg"] = " Umwana ufite aya mazina! " . $first_name . "  .$second_name . asanzwe akanditse muri sisiteme ntabwo byakunze kumwandika";
                         $res["status"] = 0;
                     } else {
                         $dbConn->exec("INSERT INTO childrens (first_name, second_name, gender, parent_id, born_date, born_address,born_weight,current_weight) VALUES('$first_name', '$second_name', '$gender', '$pid', '$born' , '$born_addres', $born_weight, $current_weight)");
@@ -279,17 +278,17 @@ function login($level, $dbConn, $phone)
                             $dbConn->exec("INSERT INTO message (ref,cost,receiver,status) VALUES('$ref',$cost,'$receiver','$status')");
                         }
 
-                        $res["msg"] = "END Byegenze neza! " . $first_name . " yanditswe muri sisiteme";
+                        $res["msg"] = " Byegenze neza! " . $first_name . " yanditswe muri sisiteme";
                         $res["status"] = 0;
                     }
                 } catch (PDOException $e) {
-                    $res["msg"] = "END habaye ikibazo, mwongere mukanya";
+                    $res["msg"] = " habaye ikibazo, mwongere mukanya";
                     $res["status"] = 0;
                 }
             }
             break;
         default:
-            $res["msg"] = "END habaye ikibazo, mwongere mukanya";
+            $res["msg"] = " habaye ikibazo, mwongere mukanya";
             $res["status"] = 0;
             break;
     }
@@ -306,82 +305,82 @@ function register($level, $phone, $dbConn)
     $search_result = $dbConn->query("SELECT * FROM guardians WHERE phone='$phone'");
     $total_rows = $search_result->rowCount();
     if ($total_rows > 0) {
-        $res["msg"] = "END Murakoze iyi $phone nimero mwakoresheje isanzwe iri muri sisiteme!";
+        $res["msg"] = " Murakoze iyi $phone nimero mwakoresheje isanzwe iri muri sisiteme!";
         $res["status"] = 0;
     } else {
         switch (count($temp)) {
             case 2:
-                $res["msg"] = "CON Andika izina rya mbere:";
+                $res["msg"] = " Andika izina rya mbere:";
                 $res["status"] = 1;
                 break;
             case 3:
                 if (empty($lvl)) {
-                    $res["msg"] = "END ntakintu mwinjijemo ntabwo byemewe";
+                    $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
                     $res["status"] = 0;
                 } else if (ctype_alpha($lvl) != 1) {
-                    $res["msg"] = "END Hemewe inyuguti gusa";
+                    $res["msg"] = " Hemewe inyuguti gusa";
                     $res["status"] = 0;
                 } else {
-                    $res["msg"] = "CON Andika andi mazina yawe:";
+                    $res["msg"] = " Andika andi mazina yawe:";
                     $res["status"] = 1;
                 }
                 break;
 
             case 4:
                 if (empty($lvl)) {
-                    $res["msg"] = "END ntakintu mwinjijemo ntabwo byemewe";
+                    $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
                     $res["status"] = 0;
                 } else {
-                    $res["msg"] = "CON Andika aho ubarizwa(kuntara-kukagari):";
+                    $res["msg"] = " Andika aho ubarizwa(kuntara-kukagari):";
                     $res["status"] = 1;
                 }
                 break;
             case 5:
                 if (empty($lvl)) {
-                    $res["msg"] = "END ntakintu mwinjijemo ntabwo byemewe";
+                    $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
                     $res["status"] = 0;
                 } else {
-                    $res["msg"] = "CON Andika inumero y'indangamuntu:";
+                    $res["msg"] = " Andika inumero y'indangamuntu:";
                     $res["status"] = 1;
                 }
                 break;
                 // else if (ctype_alpha($lvl) != 1) {
-                //     $res["msg"] = "END Hemewe inyuguti gusa";
+                //     $res["msg"] = " Hemewe inyuguti gusa";
                 //     $res["status"] = 0;
                 // } 
             case 6:
                 if (empty($lvl)) {
-                    $res["msg"] = "END Ntakintu mwinjijemo ntabwo byemewe";
+                    $res["msg"] = " Ntakintu mwinjijemo ntabwo byemewe";
                     $res["status"] = 0;
                 } else if ((ctype_digit($lvl) != 1) || (strlen($lvl) != 16)) {
-                    $res["msg"] = "END Hemewe imibare 16";
+                    $res["msg"] = " Hemewe imibare 16";
                     $res["status"] = 0;
                 }
                 $search_result = $dbConn->query("SELECT * FROM guardians WHERE id_card_number='$lvl' AND  phone='$phone'");
                 $total_rows = $search_result->rowCount();
                 if ($total_rows > 0) {
-                    $res["msg"] = "END Iyi nimero yindangamuntu mwakoresheje isanzwe yandikishijwe kuri iyi nimero: $phone muri sisiteme!";
+                    $res["msg"] = " Iyi nimero yindangamuntu mwakoresheje isanzwe yandikishijwe kuri iyi nimero: $phone muri sisiteme!";
                     $res["status"] = 0;
                 } else {
-                    $res["msg"] = "CON Hitamo umubare w'ibanga:";
+                    $res["msg"] = " Hitamo umubare w'ibanga:";
                     $res["status"] = 1;
                 }
                 break;
             case 7:
                 if (empty($lvl)) {
-                    $res["msg"] = "END Ntakintu mwinjijemo ntabwo byemewe";
+                    $res["msg"] = " Ntakintu mwinjijemo ntabwo byemewe";
                     $res["status"] = 0;
                 } else {
-                    $res["msg"] = "CON Emeza umubare w'ibanga wongera uwushyiremo:";
+                    $res["msg"] = " Emeza umubare w'ibanga wongera uwushyiremo:";
                     $res["status"] = 1;
                 }
                 break;
             case 8:
                 if (empty($lvl)) {
-                    $res["msg"] = "END Ntakintu mwinjijemo ntabwo byemewe";
+                    $res["msg"] = " Ntakintu mwinjijemo ntabwo byemewe";
                     $res["status"] = 0;
                 } else if (trim(str_replace("#", '', $temp[count($temp) - 2])) != trim(str_replace("#", '', $temp[count($temp) - 1]))) {
-                    $res["msg"] = "END Umubare w'i ibanga ntuhuye nuwo winjije bwambere";
+                    $res["msg"] = " Umubare w'i ibanga ntuhuye nuwo winjije bwambere";
                     $res["status"] = 0;
                 } else {
                     $first_name = trim(str_replace("#", '', $temp[count($temp) - 6]));
@@ -410,21 +409,21 @@ function register($level, $phone, $dbConn)
                             $dbConn->exec("INSERT INTO messages (ref,cost,receiver,status) VALUES('$ref',$cost,'$receiver','$status')");
                         }
 
-                        $res["msg"] = "END kwiyandikisha byagenze neza murakira ubutumwa bw'ikaze mukanya. Murakoze!";
+                        $res["msg"] = " kwiyandikisha byagenze neza murakira ubutumwa bw'ikaze mukanya. Murakoze!";
                         $res["status"] = 0;
                     } catch (PDOException $e) {
                         if ($e->getCode() == "23000" && strpos($e->getMessage(), "guardians_id_card_number_unique") !== false) {
-                            $res["msg"] = "END Inimero yindangamuntu mwakoresheje isanzwe yandikishijwe kuri iyi nimero: $phone muri sisiteme !";
+                            $res["msg"] = " Inimero yindangamuntu mwakoresheje isanzwe yandikishijwe kuri iyi nimero: $phone muri sisiteme !";
                             $res["status"] = 0;
                         } else {
-                            $res["msg"] = "END habaye ikibazo, mwongere mukanya";
+                            $res["msg"] = " habaye ikibazo, mwongere mukanya";
                             $res["status"] = 0;
                         }
                     }
                 }
                 break;
             default:
-                $res["msg"] = "END habaye ikibazo, mwongere mukanya";
+                $res["msg"] = " habaye ikibazo, mwongere mukanya";
                 $res["status"] = 0;
                 break;
         }
@@ -436,7 +435,7 @@ function resSelectedMenu($lvl, $dbConn, $phone)
 {
     switch ($lvl) {
         case 1:
-            $res["msg"] = "CON Andika Izina rya mbere (ry'umwana):";
+            $res["msg"] = " Andika Izina rya mbere (ry'umwana):";
             $res["status"] = 1;
             break;
         case 2:
@@ -444,12 +443,12 @@ function resSelectedMenu($lvl, $dbConn, $phone)
             $search_result = $dbConn->query("SELECT * FROM guardians WHERE phone='$phone'");
             $fetched_rows = $search_result->fetch();
             $pid = $fetched_rows['id'];
-            $comb_res = "CON Abana Bakwanditseho:\n";
+            $comb_res = " Abana Bakwanditseho:\n";
 
             // get childrens under this->parent
             $child_result = $dbConn->query("SELECT * FROM childrens WHERE parent_id='$pid'");
             if ($child_result->rowCount() < 1) {
-                $res["msg"] = "END Nta mwana ukwandikishijeho.";
+                $res["msg"] = " Nta mwana ukwandikishijeho.";
                 $res["status"] = 0;
                 break;
             } else {
@@ -463,11 +462,11 @@ function resSelectedMenu($lvl, $dbConn, $phone)
             $res["status"] = 1;
             break;
         case 3:
-            $res["msg"] = "CON Andika igitekerezo cyagwa Ikibazo cyawe:";
+            $res["msg"] = " Andika igitekerezo cyagwa Ikibazo cyawe:";
             $res["status"] = 1;
             break;
         case 4:
-            $res["msg"] = "END Murakoze gukoresha sisitemu.";
+            $res["msg"] = " Murakoze gukoresha sisitemu.";
             $res["status"] = 0;
             break;
         case 5:
@@ -475,7 +474,7 @@ function resSelectedMenu($lvl, $dbConn, $phone)
             $res["status"] = 1;
             break;
         default:
-            $res["msg"] = "END habaye ikibazo, mwongere mukanya";
+            $res["msg"] = " habaye ikibazo, mwongere mukanya";
             $res["status"] = 0;
             break;
     }
@@ -489,27 +488,27 @@ function changePin($level, $dbConn, $phone)
     $res = array();
     switch (count($temp)) {
         case 2:
-            $res["msg"] = "CON injiza umubare wibanga usanzwe:";
+            $res["msg"] = " injiza umubare wibanga usanzwe:";
             $res["status"] = 1;
             break;
         case 3:
             $pin = $lvl;
             if (empty(trim($lvl))) {
-                $res["msg"] = "END ntakintu mwinjijemo ntabwo byemewe";
+                $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
                 $res["status"] = 0;
             } else {
                 try {
                     $search_result = $dbConn->query("SELECT * FROM guardians WHERE phone='$phone' and pin='$pin'");
                     $total_rows = $search_result->rowCount();
                     if ($total_rows == 0) {
-                        $res["msg"] = "END Umubare w'ibanga ntabwo ariwo.";
+                        $res["msg"] = " Umubare w'ibanga ntabwo ariwo.";
                         $res["status"] = 0;
                     } else {
-                        $res["msg"] = "CON Hitamo umubare w'ibanga mushya:";
+                        $res["msg"] = " Hitamo umubare w'ibanga mushya:";
                         $res["status"] = 1;
                     }
                 } catch (PDOException $e) {
-                    $res["msg"] = "END habaye ikibazo, mwongere mukanya";
+                    $res["msg"] = " habaye ikibazo, mwongere mukanya";
                     $res["status"] = 0;
                 }
             }
@@ -518,11 +517,11 @@ function changePin($level, $dbConn, $phone)
             // check if the first pin level is empty
             if (empty($lvl)) {
                 // if empty, display an error message
-                $res["msg"] = "END Ntakintu mwinjijemo ntabwo byemewe";
+                $res["msg"] = " Ntakintu mwinjijemo ntabwo byemewe";
                 $res["status"] = 0;
             } else {
                 // prompt the user to enter the second pin level
-                $res["msg"] = "CON Emeza umubare w'ibanga mushya:";
+                $res["msg"] = " Emeza umubare w'ibanga mushya:";
                 $res["status"] = 1;
             }
             break;
@@ -530,7 +529,7 @@ function changePin($level, $dbConn, $phone)
             // check if the second pin level is empty
             if (empty($lvl)) {
                 // if empty, display an error message
-                $res["msg"] = "END Ntakintu mwinjijemo ntabwo byemewe";
+                $res["msg"] = " Ntakintu mwinjijemo ntabwo byemewe";
                 $res["status"] = 0;
             } else {
                 // remove any # characters and leading/trailing whitespace from the second-to-last element in the array
@@ -538,7 +537,7 @@ function changePin($level, $dbConn, $phone)
                 // check if the second pin level matches the first pin level
                 if ($pin1 != $lvl) {
                     // if they don't match, display an error message
-                    $res["msg"] = "END Umubare w'i ibanga ntuhuye nuwo winjije bwambere";
+                    $res["msg"] = " Umubare w'i ibanga ntuhuye nuwo winjije bwambere";
                     $res["status"] = 0;
                 } else {
                     // if they match, update the pin in the database
@@ -546,17 +545,17 @@ function changePin($level, $dbConn, $phone)
                     $phone = $phone;
                     try {
                         $dbConn->exec("UPDATE guardians SET pin=$pin WHERE phone=$phone");
-                        $res["msg"] = "END Murakoze guhindura umubare wawe wibanga byukunze!";
+                        $res["msg"] = " Murakoze guhindura umubare wawe wibanga byukunze!";
                         $res["status"] = 0;
                     } catch (PDOException $e) {
-                        $res["msg"] = "END habaye ikibazo, mwongere mukanya";
+                        $res["msg"] = " habaye ikibazo, mwongere mukanya";
                         $res["status"] = 0;
                     }
                 }
             }
             break;
         default:
-            $res["msg"] = "END habaye ikibazo, mwongere mukanya";
+            $res["msg"] = " habaye ikibazo, mwongere mukanya";
             $res["status"] = 0;
             break;
     }
@@ -569,7 +568,7 @@ function toggleUserMenus($level, $dbConn, $phone, $txt)
     $res = array();
     switch ($level[count($level) - 2]) {
         case 1:
-            $res["msg"] = "CON Andika andi mazina y'umwana:";
+            $res["msg"] = " Andika andi mazina y'umwana:";
             $res["status"] = 1;
             break;
         case 2:
@@ -590,11 +589,11 @@ function toggleUserMenus($level, $dbConn, $phone, $txt)
                     }
                     $res["status"] = 1;
                 } catch (PDOException $e) {
-                    $res["msg"] = "END habaye ikibazo, mwongere mukanya";
+                    $res["msg"] = " habaye ikibazo, mwongere mukanya";
                     $res["status"] = 0;
                 }
             } catch (PDOException $e) {
-                $res["msg"] = "END habaye ikibazo, mwongere mukanya";
+                $res["msg"] = " habaye ikibazo, mwongere mukanya";
                 $res["status"] = 0;
             }
             break;
@@ -605,15 +604,15 @@ function toggleUserMenus($level, $dbConn, $phone, $txt)
             $msg = trim(str_replace("#", '', $level[count($level) - 1]));
             try {
                 $dbConn->exec("INSERT INTO chat_rooms (parent_id,sender, message) VALUES('$parent_id','$parent_id','$msg')");
-                $res["msg"] = "END Murakoze! igitekerezo cyanyu cyakiriwe";
+                $res["msg"] = " Murakoze! igitekerezo cyanyu cyakiriwe";
                 $res["status"] = 0;
             } catch (PDOException $e) {
-                $res["msg"] = "END habaye ikibazo, mwongere mukanya";
+                $res["msg"] = " habaye ikibazo, mwongere mukanya";
                 $res["status"] = 0;
             }
             break;
         default:
-            $res["msg"] = "END habaye ikibazo, mwongere mukanya";
+            $res["msg"] = " habaye ikibazo, mwongere mukanya";
             $res["status"] = 0;
             break;
     }
@@ -708,7 +707,7 @@ function calcAges($date)
 //ChildInfo function used wrapper up children infomation with her/his corresponding vaccine
 function ChildInfo($child_fetched_rows, $dbConn)
 {
-    $res = "END Imyirondoro ya " . $child_fetched_rows['first_name'] . " :\n\n" .
+    $res = " Imyirondoro ya " . $child_fetched_rows['first_name'] . " :\n\n" .
         "- Amazina: " . $child_fetched_rows['first_name'] . " " . $child_fetched_rows['second_name'] . "\n." .
         "- Ibiro afite: " . $child_fetched_rows['current_weight'] / 1000 . " (kg).\n" .
         "- Aho yavukiye: " . $child_fetched_rows['born_address'] . ".\n" .
@@ -733,7 +732,7 @@ function ChildInfo($child_fetched_rows, $dbConn)
     } else {
         // handle the error
         echo "Error executing query: " . $stmt->error;
-        $res = "END habaye ikibazo, mwongere mukanya";
+        $res = " habaye ikibazo, mwongere mukanya";
     }
 
     return $res;
@@ -741,8 +740,8 @@ function ChildInfo($child_fetched_rows, $dbConn)
 # close the pdo connection
 $dbConn = null;
 
-$resp = array("sessionId" => $session_id, "message" => $response, "ContinueSession" => $ContinueSession);
+$resp = array("sessionId" => $session_id, "message" => $response, "tinueSession" => $ContinueSession);
 
 
 
-echo  $response;
+echo  json_encode($resp);
