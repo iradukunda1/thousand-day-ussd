@@ -739,7 +739,7 @@ function ChildInfo($child_fetched_rows, $dbConn)
 # close the pdo connection
 $dbConn = null;
 
-$resp = array("sessionId" => $session_id, "message" => $response, "tinueSession" => $ContinueSession);
+$resp = array("sessionId" => $session_id, "message" => $response, "ContinueSession" => $ContinueSession);
 
 
 
