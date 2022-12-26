@@ -26,17 +26,16 @@ try {
     return;
 }
 
-// Get the parameters provided by Africa's Talking USSD gateway 
-$phone =  addCountryPrefix($_POST['phoneNumber'], "+25");
-$session_id = $_POST['sessionId'];
-$userinput = $_POST['text'];
-$serviceCode = addHashTagSuffix($_POST['serviceCode']);
-// $networkCode = $_REQUEST['networkCode'];
+// Get the parameters provided by MISTA 
+$phone =  $_POST["msisdn"];
+$session_id = $_POST["sessionId"];
+$userinput = urldecode($_POST["UserInput"]);
+$serviceCode = addHashTagSuffix($_POST["serviceCode"]);
+$networkCode = $_POST["networkCode"];
 
 
 $ussd_string_exploded = explode("4", $userinput);
 
-$ussd_string_exploded = explode("4", $userinput);
 
 // Get menu level from ussd_string reply
 $level = $ussd_string_exploded[count($ussd_string_exploded) - 1];
@@ -72,7 +71,7 @@ if ($userinput == "*662*800*4#") {
                 $ContinueSession = 1;
             }
             break;
-        case "":
+        case "#":
             $res_temp = changePin($level, $dbConn, $phone);
             $response = $res_temp['msg'];
             if ($res_temp['status'] == 0) {
