@@ -83,7 +83,7 @@ if ($userinput == "800") {
             }
             break;
         default:
-            $response = "END Wahisemo Ibitaribyo Angera!!!";
+            $response = "END Wahisemo ibitaribyo ongera mukanya!!!";
             $ContinueSession = 0;
             break;
     }
@@ -173,25 +173,34 @@ function login($level, $dbConn, $phone)
             break;
         case 7:
             if (empty($lvl)) {
-                $res["msg"] = "CON ntakintu mwinjijemo ntabwo byemewe";
+                $res["msg"] = "END ntakintu mwinjijemo ntabwo byemewe";
+                $res["status"] = 0;
+            } else if (ctype_digit($lvl) != 1) {
+                $res["msg"] = "END hemewe imibare gusa";
                 $res["status"] = 0;
             } else {
-                $res["msg"] = "CON andikamo ibiro umwana yavukanye mumagaramu(gram).urugero: 1500gram(1.5kg)\n";
+                $res["msg"] = "CON andikamo ibiro umwana yavukanye mumagaramu(gram).urugero: 1500(1.5kg)\n";
                 $res["status"] = 1;
             }
             break;
         case 8:
             if (empty($lvl)) {
-                $res["msg"] = "CON ntakintu mwinjijemo ntabwo byemewe";
+                $res["msg"] = "END ntakintu mwinjijemo ntabwo byemewe";
+                $res["status"] = 0;
+            } else if (ctype_digit($lvl) != 1) {
+                $res["msg"] = "END hemewe imibare gusa";
                 $res["status"] = 0;
             } else {
-                $res["msg"] = "CON andikamo ibiro umwana afite ubu mumagaramu(gram).urugero: 2000gram(2kg)\n";
+                $res["msg"] = "CON andikamo ibiro umwana afite ubu mumagaramu(gram).urugero: 2000(2kg)\n";
                 $res["status"] = 1;
             }
             break;
         case 9:
             if (empty($lvl)) {
-                $res["msg"] = "CON ntakintu mwinjijemo ntabwo byemewe";
+                $res["msg"] = "END ntakintu mwinjijemo ntabwo byemewe";
+                $res["status"] = 0;
+            } else if (ctype_digit($lvl) != 1) {
+                $res["msg"] = "END hemewe imibare gusa";
                 $res["status"] = 0;
             } else {
                 $res["msg"] = "CON andikamo aho umwana yavukiye(aderesi).urugero:kicukiro centre de saint\n";
@@ -331,14 +340,15 @@ function register($level, $phone, $dbConn)
                 if (empty($lvl)) {
                     $res["msg"] = "END ntakintu mwinjijemo ntabwo byemewe";
                     $res["status"] = 0;
-                } else if (ctype_alpha($lvl) != 1) {
-                    $res["msg"] = "END Hemewe inyuguti gusa";
-                    $res["status"] = 0;
                 } else {
                     $res["msg"] = "CON Andika inumero y'indangamuntu:";
                     $res["status"] = 1;
                 }
                 break;
+                // else if (ctype_alpha($lvl) != 1) {
+                //     $res["msg"] = "END Hemewe inyuguti gusa";
+                //     $res["status"] = 0;
+                // } 
             case 6:
                 if (empty($lvl)) {
                     $res["msg"] = "END Ntakintu mwinjijemo ntabwo byemewe";
@@ -628,7 +638,7 @@ function SendSms($phone, $sms)
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => array('to' => $phone, 'from' => 'Baby Care', 'unicode' => '0', 'sms' => $sms, 'action' => 'send-sms'),
+            CURLOPT_POSTFIELDS => array('to' => $phone, 'from' => 'ThousandDay', 'unicode' => '0', 'sms' => $sms, 'action' => 'send-sms'),
             CURLOPT_HTTPHEADER => array(
                 "x-api-key:$sms_key"
             ),
