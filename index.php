@@ -27,7 +27,7 @@ try {
 }
 
 // Get the parameters provided by MISTA 
-$phone = addCountryPrefix($_POST["msisdn"], "+25");
+$phone = addCountryPrefix($_POST["msisdn"]);
 $session_id = $_POST["sessionId"];
 $userinput = urldecode($_POST["UserInput"]);
 $serviceCode = addHashTagSuffix($_POST["serviceCode"]);
@@ -672,15 +672,10 @@ function SendSms($phone, $sms)
 }
 
 //Add +25 prefix on phone number if it doesn't
-function addCountryPrefix($phone, $code)
+function addCountryPrefix($phone)
 {
-    // Check if the phone number starts with "+25"
-    if (substr($phone, 0, 3) !== $code) {
-        // If it does not, add the prefix
-        return $code . $phone;
-    }
     // If it does, return the phone number as-is
-    return $phone;
+    return substr($phone, 0, 1) != '+' ? (substr($phone, 0, 1) == '%' ? str_replace("%2B", '+', $phone) : "+" . $phone) : $phone;
 }
 
 //addHashTagSuffix will add # to the end of the string if it doesn't otherwise it will return the string as-is
