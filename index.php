@@ -34,12 +34,12 @@ $serviceCode = addHashTagSuffix($_POST["serviceCode"]);
 $networkCode = $_POST["networkCode"];
 
 
-$ussd_string_exploded = explode("4", $userinput);
+$ussd_string_exploded = explode("16", $userinput);
 
 
 // Get menu level from ussd_string reply
 $level = $ussd_string_exploded[count($ussd_string_exploded) - 1];
-if ($userinput == "*662*800*4#") {
+if ($userinput == "*662*800*16#") {
     $response = display_menu();
     $ContinueSession = 1;
 } else {
@@ -71,7 +71,7 @@ if ($userinput == "*662*800*4#") {
                 $ContinueSession = 1;
             }
             break;
-        case "#":
+        case 4:
             $res_temp = changePin($level, $dbConn, $phone);
             $response = $res_temp['msg'];
             if ($res_temp['status'] == 0) {
