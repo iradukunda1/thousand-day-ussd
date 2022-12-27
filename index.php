@@ -27,7 +27,7 @@ try {
 }
 
 // Get the parameters provided by MISTA 
-$phone =  $_POST["msisdn"];
+$phone = addCountryPrefix($_POST["msisdn"], "+25");
 $session_id = $_POST["sessionId"];
 $userinput = urldecode($_POST["UserInput"]);
 $serviceCode = addHashTagSuffix($_POST["serviceCode"]);
