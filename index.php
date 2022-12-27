@@ -44,7 +44,7 @@ if ($userinput == "*662*800*16#") {
     $ContinueSession = 1;
 } else {
     $temp = explode('*', $level);
-    $level_1 = str_replace("#", '', $temp[0]);
+    $level_1 = str_replace("#", '', $temp[1]);
     switch ($level_1) {
         case 1:
             // If user selected 1 send them to the registration menu
@@ -115,6 +115,7 @@ function login($level, $dbConn, $phone)
     $temp = explode('*', $level);
     $lvl = trim(str_replace("#", '', $temp[count($temp) - 1]));
     $res = array();
+
     switch (count($temp)) {
         case 2:
             $res["msg"] = " injiza umubare wibanga:";
