@@ -97,16 +97,16 @@ function display_menu()
 // Function that hanldles About menu
 function about()
 {
-    $about_text = " -Iminsi Igihumbi ni gahunda izajya ifasha ababyeyi kugira amakuru ahagije kumikurire yabana bari munsi y'imyaka 2 \n 
-    - umubyeyi yiyandikisha muri sisiteme hanyuma akabasha kwandika umwana we \n
-    
+    $about_text = " 1 -Iminsi Igihumbi ni gahunda izajya ifasha ababyeyi kugira amakuru ahagije kumikurire yabana bari munsi y'imyaka\n 
+    2 - umubyeyi abona amakuru uko yabana bwamwandikishijeho ndetse ninyingo. \n
+    3 - umubyeyi ashobora kubaza ikibazo.    
     ";
     return $about_text;
 }
 
 function display_user_menu()
 {
-    $ussd_text = " Ibijyanye na konti yajye \n\n 1. kwandika umwana mushya\n 2. Kureba abana bakwanditseho \n  3. Tanga igitekerezo cyagwa ikibazo\n 4. Gusohoka muri system\n 5. Subira ahabanza \n";
+    $ussd_text = " Ibijyanye na konti yajye \n\n 1. Kureba abana bakwanditseho \n  2. Tanga igitekerezo cyagwa ikibazo\n 3. Gusohoka muri system\n 4. Subira ahabanza \n";
     return $ussd_text;
 }
 
@@ -161,132 +161,132 @@ function login($level, $dbConn, $phone)
                 $res = array_merge($res, $resSel);
             }
             break;
-        case 6:
-            if (empty($lvl)) {
-                $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
-                $res["status"] = 0;
-            } else {
-                $res["msg"] = " igitsina cyumwana \n 1.gabo \n 2.gore ";
-                $res["status"] = 1;
-            }
-            break;
-        case 7:
-            if (empty($lvl)) {
-                $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
-                $res["status"] = 0;
-            } else if (ctype_digit($lvl) != 1) {
-                $res["msg"] = " hemewe imibare gusa";
-                $res["status"] = 0;
-            } else {
-                $res["msg"] = " andikamo ibiro umwana yavukanye mumagaramu(gram).urugero: 1500(1.5kg)\n";
-                $res["status"] = 1;
-            }
-            break;
-        case 8:
-            if (empty($lvl)) {
-                $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
-                $res["status"] = 0;
-            } else if (ctype_digit($lvl) != 1) {
-                $res["msg"] = " hemewe imibare gusa";
-                $res["status"] = 0;
-            } else {
-                $res["msg"] = " andikamo ibiro umwana afite ubu mumagaramu(gram).urugero: 2000(2kg)\n";
-                $res["status"] = 1;
-            }
-            break;
-        case 9:
-            if (empty($lvl)) {
-                $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
-                $res["status"] = 0;
-            } else if (ctype_digit($lvl) != 1) {
-                $res["msg"] = " hemewe imibare gusa";
-                $res["status"] = 0;
-            } else {
-                $res["msg"] = " andikamo aho umwana yavukiye(aderesi).urugero:kicukiro centre de saint\n";
-                $res["status"] = 1;
-            }
-            break;
-        case 10:
-            if (empty($lvl)) {
-                $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
-                $res["status"] = 0;
-            } else {
-                $res["msg"] = " Injiza itariki yivuka. urugero:\n " . date("Y-m-d") . (" itariki igomba kuba iri munsi yimyaka ibiri uhereye ubu") . "\n";
-                $res["status"] = 1;
-            }
-            break;
-        case 11:
-            if (empty($lvl)) {
-                $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
-                $res["status"] = 0;
-            } else if (strtotime($lvl) < strtotime('-2 years')) {
-                $res["msg"] = " Umwana agomba kuba ari munsi yimyaka 2.";
-                $res["status"] = 0;
-            } else if ($lvl > date('Y-m-d')) {
-                $res["msg"] = " Mwashyizemo itariki itaragera.";
-                $res["status"] = 0;
-            } else {
-                $search_result = $dbConn->query("SELECT * FROM guardians WHERE phone='$phone'");
-                $fetched_rows = $search_result->fetch();
-                $pid = $fetched_rows['id'];
-                $first_name = trim(str_replace("#", '', $temp[count($temp) - 7]));
-                $second_name = trim(str_replace("#", '', $temp[count($temp) - 6]));
-                $gender = trim(str_replace("#", '', $temp[count($temp) - 5]));
-                $born_weight = ((int) trim(str_replace("#", '', $temp[count($temp) - 4]))) / 1000;
-                $current_weight = (int) trim(str_replace("#", '', $temp[count($temp) - 3])) / 1000;
-                $born_addres = trim(str_replace("#", '', $temp[count($temp) - 2]));
-                $born = trim(str_replace("#", '', $temp[count($temp) - 1]));
+            // case 6:
+            //     if (empty($lvl)) {
+            //         $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
+            //         $res["status"] = 0;
+            //     } else {
+            //         $res["msg"] = " igitsina cyumwana \n 1.gabo \n 2.gore ";
+            //         $res["status"] = 1;
+            //     }
+            //     break;
+            // case 7:
+            //     if (empty($lvl)) {
+            //         $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
+            //         $res["status"] = 0;
+            //     } else if (ctype_digit($lvl) != 1) {
+            //         $res["msg"] = " hemewe imibare gusa";
+            //         $res["status"] = 0;
+            //     } else {
+            //         $res["msg"] = " andikamo ibiro umwana yavukanye mumagaramu(gram).urugero: 1500(1.5kg)\n";
+            //         $res["status"] = 1;
+            //     }
+            //     break;
+            // case 8:
+            //     if (empty($lvl)) {
+            //         $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
+            //         $res["status"] = 0;
+            //     } else if (ctype_digit($lvl) != 1) {
+            //         $res["msg"] = " hemewe imibare gusa";
+            //         $res["status"] = 0;
+            //     } else {
+            //         $res["msg"] = " andikamo ibiro umwana afite ubu mumagaramu(gram).urugero: 2000(2kg)\n";
+            //         $res["status"] = 1;
+            //     }
+            //     break;
+            // case 9:
+            //     if (empty($lvl)) {
+            //         $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
+            //         $res["status"] = 0;
+            //     } else if (ctype_digit($lvl) != 1) {
+            //         $res["msg"] = " hemewe imibare gusa";
+            //         $res["status"] = 0;
+            //     } else {
+            //         $res["msg"] = " andikamo aho umwana yavukiye(aderesi).urugero:kicukiro centre de saint\n";
+            //         $res["status"] = 1;
+            //     }
+            //     break;
+            // case 10:
+            //     if (empty($lvl)) {
+            //         $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
+            //         $res["status"] = 0;
+            //     } else {
+            //         $res["msg"] = " Injiza itariki yivuka. urugero:\n " . date("Y-m-d") . (" itariki igomba kuba iri munsi yimyaka ibiri uhereye ubu") . "\n";
+            //         $res["status"] = 1;
+            //     }
+            //     break;
+            // case 11:
+            //     if (empty($lvl)) {
+            //         $res["msg"] = " ntakintu mwinjijemo ntabwo byemewe";
+            //         $res["status"] = 0;
+            //     } else if (strtotime($lvl) < strtotime('-2 years')) {
+            //         $res["msg"] = " Umwana agomba kuba ari munsi yimyaka 2.";
+            //         $res["status"] = 0;
+            //     } else if ($lvl > date('Y-m-d')) {
+            //         $res["msg"] = " Mwashyizemo itariki itaragera.";
+            //         $res["status"] = 0;
+            //     } else {
+            //         $search_result = $dbConn->query("SELECT * FROM guardians WHERE phone='$phone'");
+            //         $fetched_rows = $search_result->fetch();
+            //         $pid = $fetched_rows['id'];
+            //         $first_name = trim(str_replace("#", '', $temp[count($temp) - 7]));
+            //         $second_name = trim(str_replace("#", '', $temp[count($temp) - 6]));
+            //         $gender = trim(str_replace("#", '', $temp[count($temp) - 5]));
+            //         $born_weight = ((int) trim(str_replace("#", '', $temp[count($temp) - 4]))) / 1000;
+            //         $current_weight = (int) trim(str_replace("#", '', $temp[count($temp) - 3])) / 1000;
+            //         $born_addres = trim(str_replace("#", '', $temp[count($temp) - 2]));
+            //         $born = trim(str_replace("#", '', $temp[count($temp) - 1]));
 
-                $search_result_not = $dbConn->query("SELECT * FROM events");
-                $search_result_data = $search_result_not->fetchAll();
+            //         $search_result_not = $dbConn->query("SELECT * FROM events");
+            //         $search_result_data = $search_result_not->fetchAll();
 
-                if (count($search_result_data) > 0) {
-                    foreach ($search_result_data as $x => $y) {
-                        $timetosend = $y[2] + time();
-                        $smstext = $y[0];
-                        try {
-                            $dbConn->exec("INSERT INTO schedulers (receiver, message, time_to_be_sent) VALUES('$phone', '$smstext', '$timetosend')");
-                        } catch (PDOException $e) {
-                            $res["msg"] = " habaye ikibazo, mwongere mukanya";
-                            $res["status"] = 0;
-                        }
-                    }
-                }
-                if ((int)$gender == 1) {
-                    $gender = "Umuhungu";
-                } else {
-                    $gender = "Umukobwa";
-                }
-                try {
-                    $search_result = $dbConn->query("SELECT * FROM childrens WHERE parent_id='$pid' AND first_name='$first_name' AND second_name='$second_name'");
-                    $fetched_rows = $search_result->fetch();
-                    if (count($search_result_data) > 0) {
-                        $res["msg"] = " Umwana ufite aya mazina! " . $first_name . "  .$second_name . asanzwe akanditse muri sisiteme ntabwo byakunze kumwandika";
-                        $res["status"] = 0;
-                    } else {
-                        $dbConn->exec("INSERT INTO childrens (first_name, second_name, gender, parent_id, born_date, born_address,born_weight,current_weight) VALUES('$first_name', '$second_name', '$gender', '$pid', '$born' , '$born_addres', $born_weight, $current_weight)");
+            //         if (count($search_result_data) > 0) {
+            //             foreach ($search_result_data as $x => $y) {
+            //                 $timetosend = $y[2] + time();
+            //                 $smstext = $y[0];
+            //                 try {
+            //                     $dbConn->exec("INSERT INTO schedulers (receiver, message, time_to_be_sent) VALUES('$phone', '$smstext', '$timetosend')");
+            //                 } catch (PDOException $e) {
+            //                     $res["msg"] = " habaye ikibazo, mwongere mukanya";
+            //                     $res["status"] = 0;
+            //                 }
+            //             }
+            //         }
+            //         if ((int)$gender == 1) {
+            //             $gender = "Umuhungu";
+            //         } else {
+            //             $gender = "Umukobwa";
+            //         }
+            //         try {
+            //             $search_result = $dbConn->query("SELECT * FROM childrens WHERE parent_id='$pid' AND first_name='$first_name' AND second_name='$second_name'");
+            //             $fetched_rows = $search_result->fetch();
+            //             if (count($search_result_data) > 0) {
+            //                 $res["msg"] = " Umwana ufite aya mazina! " . $first_name . "  .$second_name . asanzwe akanditse muri sisiteme ntabwo byakunze kumwandika";
+            //                 $res["status"] = 0;
+            //             } else {
+            //                 $dbConn->exec("INSERT INTO childrens (first_name, second_name, gender, parent_id, born_date, born_address,born_weight,current_weight) VALUES('$first_name', '$second_name', '$gender', '$pid', '$born' , '$born_addres', $born_weight, $current_weight)");
 
-                        //Send Sms and record sent sms response from mista api
-                        $smsInfo =  "Muraho , umwana yanditswe muri sisiteme yiminsi igihumbi y'umwana . mubyeyi, muzajya muhabwa inama kumikurire ya " . $first_name .  "Murakoze!";
+            //                 //Send Sms and record sent sms response from mista api
+            //                 $smsInfo =  "Muraho , umwana yanditswe muri sisiteme yiminsi igihumbi y'umwana . mubyeyi, muzajya muhabwa inama kumikurire ya " . $first_name .  "Murakoze!";
 
-                        $sms = SendSms($phone, $smsInfo);
-                        if ($sms && $sms != null) {
-                            $cost = $sms['cost'];
-                            $ref = $sms['uid'];
-                            $receiver = $sms['to'];
-                            $status = $sms['status'];
-                            $dbConn->exec("INSERT INTO message (ref,cost,receiver,status) VALUES('$ref',$cost,'$receiver','$status')");
-                        }
+            //                 $sms = SendSms($phone, $smsInfo);
+            //                 if ($sms && $sms != null) {
+            //                     $cost = $sms['cost'];
+            //                     $ref = $sms['uid'];
+            //                     $receiver = $sms['to'];
+            //                     $status = $sms['status'];
+            //                     $dbConn->exec("INSERT INTO message (ref,cost,receiver,status) VALUES('$ref',$cost,'$receiver','$status')");
+            //                 }
 
-                        $res["msg"] = " Byegenze neza! " . $first_name . " yanditswe muri sisiteme";
-                        $res["status"] = 0;
-                    }
-                } catch (PDOException $e) {
-                    $res["msg"] = " habaye ikibazo, mwongere mukanya";
-                    $res["status"] = 0;
-                }
-            }
-            break;
+            //                 $res["msg"] = " Byegenze neza! " . $first_name . " yanditswe muri sisiteme";
+            //                 $res["status"] = 0;
+            //             }
+            //         } catch (PDOException $e) {
+            //             $res["msg"] = " habaye ikibazo, mwongere mukanya";
+            //             $res["status"] = 0;
+            //         }
+            //     }
+            //     break;
         default:
             $res["msg"] = " habaye ikibazo, mwongere mukanya";
             $res["status"] = 0;
@@ -435,10 +435,6 @@ function resSelectedMenu($lvl, $dbConn, $phone)
 {
     switch ($lvl) {
         case 1:
-            $res["msg"] = " Andika Izina rya mbere (ry'umwana):";
-            $res["status"] = 1;
-            break;
-        case 2:
             // get parent id
             $search_result = $dbConn->query("SELECT * FROM guardians WHERE phone='$phone'");
             $fetched_rows = $search_result->fetch();
@@ -461,15 +457,15 @@ function resSelectedMenu($lvl, $dbConn, $phone)
             $res["msg"] = $comb_res;
             $res["status"] = 1;
             break;
-        case 3:
+        case 2:
             $res["msg"] = " Andika igitekerezo cyagwa Ikibazo cyawe:";
             $res["status"] = 1;
             break;
-        case 4:
+        case 3:
             $res["msg"] = " Murakoze gukoresha sisitemu.";
             $res["status"] = 0;
             break;
-        case 5:
+        case 4:
             $res["msg"] = display_menu();
             $res["status"] = 1;
             break;
@@ -568,10 +564,6 @@ function toggleUserMenus($level, $dbConn, $phone, $txt)
     $res = array();
     switch ($level[count($level) - 2]) {
         case 1:
-            $res["msg"] = " Andika andi mazina y'umwana:";
-            $res["status"] = 1;
-            break;
-        case 2:
             // get parent id
             try {
                 $search_result = $dbConn->query("SELECT * FROM guardians WHERE phone='$phone'");
@@ -597,7 +589,7 @@ function toggleUserMenus($level, $dbConn, $phone, $txt)
                 $res["status"] = 0;
             }
             break;
-        case 3:
+        case 2:
             $search_result = $dbConn->query("SELECT * FROM guardians WHERE phone='$phone'");
             $fetched_rows = $search_result->fetch();
             $parent_id = $fetched_rows['id'];
